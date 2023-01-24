@@ -1,10 +1,13 @@
+:root {
+    --main-bg-color: #1a3ba0;
+}
 #window{
     margin-top: 50px;
-    background-color: #000;
+    background-color: var(--main-bg-color);
     color: #fff;
     padding: 15px;
-    border-radius: 20px;
-    box-shadow: 0 0 5px black;
+    border-radius: 30px;
+    box-shadow: 0 0 5px var(--main-bg-color);
 }
 .swapbox_select {
     width: 50%;
@@ -14,15 +17,15 @@
     overflow: auto;
     margin: 20px 0;
     padding: 20px;
-    background-color: #2f2f2f;
-    border-radius: 20px;
-    border: 1px solid #565656;
+    background-color: var(--main-bg-color);
+    border-radius: 30px;
+    border: 1px solid white;
 }
 .token_select{
     padding:5px 0;
 }
 .token_select:hover{
-    background-color: #464646;
+    background-color: #152f80;
     cursor: pointer;
     
 }
@@ -41,5 +44,5 @@
     overflow: scroll;   
 }
 .navbar-custom {
-    background-color: #204ac8;
+    background-color: var(--main-bg-color);
 }
