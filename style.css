@@ -50,3 +50,6 @@
 .navbar-custom {
     background-color: var(--main-bg-color);
 }
+.login_button {
+    border-radius: 30px;
+}
