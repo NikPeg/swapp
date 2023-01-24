@@ -8,6 +8,7 @@
     padding: 15px;
     border-radius: 30px;
     box-shadow: 0 0 5px var(--main-bg-color);
+    text-align: center;
 }
 .swapbox_select {
     width: 50%;
@@ -28,6 +29,9 @@
     background-color: #152f80;
     cursor: pointer;
     
+}
+.swap_button{
+    border-radius: 30px;
 }
 .token_row{
     padding: 5px 10px;
