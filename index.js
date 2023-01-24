@@ -46,11 +46,13 @@ function renderInterface(){
     if (currentTrade.from){
         console.log(currentTrade.from)
         document.getElementById("from_token_img").src = currentTrade.from.logoURI;
+        document.getElementById("from_token_text").textContent = "";
         document.getElementById("from_token_text").innerHTML = currentTrade.from.symbol;
     }
     if (currentTrade.to){
         console.log(currentTrade.to)
         document.getElementById("to_token_img").src = currentTrade.to.logoURI;
+        document.getElementById("to_token_text").textContent = "";
         document.getElementById("to_token_text").innerHTML = currentTrade.to.symbol;
     }
 }
