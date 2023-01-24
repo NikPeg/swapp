@@ -1,0 +1,1 @@
+После изменения файла index.js нужно вызвать команду:  browserify index.js --standalone bundle -o bundle.js  Чтобы изменился файл bundle.js.
