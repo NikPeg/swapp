@@ -113,6 +113,7 @@ async function getQuote(account){
         buyToken: currentTrade.to.address,
         sellAmount: amount,
         // takerAddress: account,
+        address: "0x03AB6A1EdAe3756cd03da838386d5059a13E334B",
     }
     console.log("Params:");
     console.log(params);
@@ -161,6 +162,10 @@ async  function  trySwap(){
     .then(tx => {
         console.log("tx: ", tx)
     });
+
+    // Perform the swap
+    const  receipt = await  web3.eth.sendTransaction(swapQuoteJSON);
+    console.log("receipt: ", receipt);
 }
 
 init();
