@@ -1,1 +1,1 @@
-После изменения файла index.js нужно вызвать команду:  browserify index.js --standalone bundle -o bundle.js  Чтобы изменился файл bundle.js.
+После изменения файла index.js нужно вызвать команду:  browserify index.js --standalone bundle -o bundle.js  Чтобы изменился файл bundle.js.Информация о произведенной транзакции может быть получена:  https://etherscan.io/tx/*номер_транзакции*  В тестовой сети Goerli:  https://goerli.etherscan.io/tx/*номер транзакции*

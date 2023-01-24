@@ -112,9 +112,11 @@ async function getQuote(account){
     const params = {
         sellToken: currentTrade.from.address,
         buyToken: currentTrade.to.address,
+        // sellToken: "ETH",
+        // buyToken: "WETH",
         sellAmount: amount,
         // takerAddress: account,
-        address: "0x03AB6A1EdAe3756cd03da838386d5059a13E334B",
+        affiliateAddress: account,
     }
     console.log("Params:");
     console.log(params);
