@@ -115,7 +115,8 @@ async function getQuote(account){
         sellAmount: amount,
         takerAddress: account,
     }
-  
+    console.log("Params:");
+    console.log(params);
     // Fetch the swap quote.
     const response = await fetch(`https://api.0x.org/swap/v1/quote?${qs.stringify(params)}`);
     
