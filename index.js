@@ -149,12 +149,10 @@ async function getQuote(account){
     let amount = Number(document.getElementById("from_amount").value * 10 ** currentTrade.from.decimals);
   
     const params = {
-        sellToken: currentTrade.from.address,
-        buyToken: currentTrade.to.address,
-        // sellToken: "ETH",
-        // buyToken: "WETH",
+        sellToken: currentTrade.from,
+        buyToken: currentTrade.to,
         sellAmount: amount,
-        // takerAddress: account,
+        takerAddress: account,
         affiliateAddress: account,
     }
     console.log("Params:");
