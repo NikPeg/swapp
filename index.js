@@ -65,7 +65,7 @@ async function connect() {
         } catch (error) {
             console.log(error);
         }
-        document.getElementById("login_button").innerHTML = "Connected";
+        document.getElementById("login_button").innerHTML = "Подключено";
         // const accounts = await ethereum.request({ method: "eth_accounts" });
         document.getElementById("swap_button").disabled = false;
     } else {
