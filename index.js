@@ -9,25 +9,30 @@ async function init() {
     await listAvailableTokens();
 }
 
+// Uniswap имеет проект https://tokenlists.org/, стандарт для создания списков токенов ERC20 для фильтрации высококачественных, 
+// законных токенов от мошенничества, подделок и дубликатов.
 async function listAvailableTokens(){
     console.log("initializing");
+    // Список CoinGecko — один из самых надежных, поэтому мы будем использовать этот запрос.
     let response = await fetch('https://tokens.coingecko.com/uniswap/all.json');
     let tokenListJSON = await response.json();
     console.log("listing available tokens: ", tokenListJSON);
     tokens = tokenListJSON.tokens;
     console.log("tokens: ", tokens);
 
-    // Create token list for modal
+    // Создаем список токенов для модального окна.
     let parent = document.getElementById("token_list");
     for (const i in tokens){
-        // Token row in the modal token list
+        // Строка с информацией о токене в окне.
         let div = document.createElement("div");
         div.className = "token_row";
+        // Отобразить изображение и символ выбранного токена в поле обмена.
         let html = `
         <img class="token_list_img" src="${tokens[i].logoURI}">
           <span class="token_list_text">${tokens[i].symbol}</span>
           `;
         div.innerHTML = html;
+        // selectToken() вызывается при клике на токен.
         div.onclick = () => {
             selectToken(tokens[i]);
         };
@@ -36,23 +41,31 @@ async function listAvailableTokens(){
 }
 
 async function selectToken(token){
+    // Автоматически закрывает окно при выборе токена.
     closeModal();
+    // Отслеживает, на какой стороне торговли мы находимся — до или после.
     currentTrade[currentSelectSide] = token;
+    // Выводит выбранный токен в лог для отладки.
     console.log("currentTrade: ", currentTrade);
     renderInterface();
 }
 
+// Функция, отражающая символ и имя токена.
 function renderInterface(){
     if (currentTrade.from){
-        console.log(currentTrade.from)
+        console.log(currentTrade.from);
+        // Устанавливает символ токена.
         document.getElementById("from_token_img").src = currentTrade.from.logoURI;
         document.getElementById("from_token_text").textContent = "";
+        // Устанавливает название токена.
         document.getElementById("from_token_text").innerHTML = currentTrade.from.symbol;
     }
     if (currentTrade.to){
         console.log(currentTrade.to)
+        // Устанавливает символ токена.
         document.getElementById("to_token_img").src = currentTrade.to.logoURI;
         document.getElementById("to_token_text").textContent = "";
+        // Устанавливает название токена.
         document.getElementById("to_token_text").innerHTML = currentTrade.to.symbol;
     }
 }
@@ -86,6 +99,7 @@ async function connect() {
 
 //  Функция, которая открывает модальное окно при нажатии на надпись "Выберете токен".
 function openModal(side){
+    // Сохраняет, выбрал ли пользователь токен на стороне "До" или "После".
     currentSelectSide = side;
     document.getElementById("token_modal").style.display = "block";
 }
@@ -95,28 +109,39 @@ function closeModal(){
     document.getElementById("token_modal").style.display = "none";
 }
 
+// Функция вызывает endpoint https://docs.0x.org/0x-api-swap/api-references/get-swap-v1-price
+// 
 async function getPrice(){
     console.log("Getting Price");
   
+    // Добавляем оператор, потому что мы хотим запустить запрос только в том случае, е
+    // если были выбраны токены from и to, а также введена сумма токена from.
     if (!currentTrade.from || !currentTrade.to || !document.getElementById("from_amount").value) return;
+    // Сумма рассчитывается исходя из наименьшей базовой единицы токена. 
+    // Мы получаем это путем умножения (от суммы) x (10 в степени количества знаков после запятой).
     let amount = Number(document.getElementById("from_amount").value * 10 ** currentTrade.from.decimals);
   
+    // Устанавливаются параметры.
     const params = {
         sellToken: currentTrade.from.address,
         buyToken: currentTrade.to.address,
         sellAmount: amount,
     }
   
-    // Fetch the swap price.
+    // Загружается цена обмена.
     const response = await fetch(`https://api.0x.org/swap/v1/price?${qs.stringify(params)}`);
     
+    // Ожидаем и парсим JSON-ответ.
     swapPriceJSON = await response.json();
     console.log("Price: ", swapPriceJSON);
     
+    // Используются возвращенные значения для заполнения суммы покупки и расчетного расхода газа в пользовательском интерфейсе.
     document.getElementById("to_amount").value = swapPriceJSON.buyAmount / (10 ** currentTrade.to.decimals);
     document.getElementById("gas_estimate").innerHTML = swapPriceJSON.estimatedGas;
 }
 
+// Использовать адрес учетной записи пользователя в MetaMask для получения котировки.
+// Функция возвращает ордер, в который маркет-мейкер вложил свои активы.
 async function getQuote(account){
     console.log("Getting Quote");
   
@@ -134,7 +159,7 @@ async function getQuote(account){
     }
     console.log("Params:");
     console.log(params);
-    // Fetch the swap quote.
+    // Загружает цитату для обмена.
     const response = await fetch(`https://api.0x.org/swap/v1/quote?${qs.stringify(params)}`);
     
     swapQuoteJSON = await response.json();
@@ -146,31 +171,34 @@ async function getQuote(account){
     return swapQuoteJSON;
 }
 
+// Функция, реализующая обмен токенов.
 async  function  trySwap(){
     console.log("Swapping...");
 
-    // The address, if any, of the most recently used account that the caller is permitted to access
+    // Адрес, если таковой имеется, последней используемой учетной записи, к которой абоненту разрешен доступ.
     let accounts = await ethereum.request({ method: "eth_accounts" });
     let takerAddress = accounts[0];
-    // Log the the most recently used address in our MetaMask wallet
+    // Регистрируем самый последний использованный адрес в нашем MetaMask кошельке.
     console.log("takerAddress: ", takerAddress);
-        // Pass this as the account param into getQuote() we built out earlier. This will return a JSON object trade order. 
+    // Передаем этот как параметр учетной записи в getQuote(), который мы создали ранее. Это вернет торговый ордер объекта JSON. 
     const  swapQuoteJSON = await  getQuote(takerAddress);
 
-    // Setup the erc20abi in json format so we can interact with the approve method below
+    // Настроим erc20abi в формате json, чтобы мы могли взаимодействовать с приведенным ниже методом утверждения.
     const erc20abi= [{ "inputs": [ { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "symbol", "type": "string" }, { "internalType": "uint256", "name": "max_supply", "type": "uint256" } ], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" } ], "name": "allowance", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "approve", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "burn", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "burnFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [ { "internalType": "uint8", "name": "", "type": "uint8" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "subtractedValue", "type": "uint256" } ], "name": "decreaseAllowance", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "addedValue", "type": "uint256" } ], "name": "increaseAllowance", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "recipient", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "transfer", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "address", "name": "recipient", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }]
-    // Set up approval amount for the token we want to trade from
+    // Настроим сумму одобрения для токена, с которого мы хотим торговать.
     const fromTokenAddress = currentTrade.from.address;
 
-    // In order for us to interact with a ERC20 contract's method's, need to create a web3 object. This web3.eth.Contract object needs a erc20abi which we can get from any erc20 abi as well as the specific token address we are interested in interacting with, in this case, it's the fromTokenAddrss
-    // Read More: https://web3js.readthedocs.io/en/v1.2.11/web3-eth-contract.html#web3-eth-contract
+    // Для того, чтобы мы могли взаимодействовать с методом контракта arc 20, необходимо создать объект web3. 
+    // Этому объекту web3.eth.Contract требуется erc20abi, который мы можем получить из любого erc20 abi, 
+    // а также конкретный адрес токена, с которым мы заинтересованы во взаимодействии, в данном случае это fromTokenAddrss.
     const  web3 = new  Web3(Web3.givenProvider);
     const ERC20TokenContract = new web3.eth.Contract(erc20abi, fromTokenAddress);
     console.log("setup ERC20TokenContract: ", ERC20TokenContract);
-    // The max approval is set here. Using Bignumber to handle large numbers and account for overflow (https://github.com/MikeMcl/bignumber.js/)
+    // Здесь задано максимальное разрешение. Использование большого числа для обработки больших чисел и учета переполнения.
     const maxApproval = new BigNumber(2).pow(256).minus(1);
     console.log("approval amount: ", maxApproval);
-    // Grant the allowance target (the 0x Exchange Proxy) an  allowance to spend our tokens. Note that this is a txn that incurs fees. 
+    // Предоставим целевому получателю пособия (прокси-серверу обмена 0x) разрешение на расходование наших токенов. 
+    // Это txn, за который взимается плата.
     const tx = await ERC20TokenContract.methods.approve(
         swapQuoteJSON.allowanceTarget,
         maxApproval,
@@ -180,13 +208,14 @@ async  function  trySwap(){
         console.log("tx: ", tx);
     });
 
-    // Perform the swap
+    // Производится обмен.
     const  receipt = await  web3.eth.sendTransaction(swapQuoteJSON);
     console.log("receipt: ", receipt);
 }
 
 init();
 
+// Привязка функций к вызывающим их кнопкам.
 document.getElementById("login_button").onclick = connect;
 document.getElementById("from_token_select").onclick = () => {
     openModal("from");
@@ -195,5 +224,6 @@ document.getElementById("to_token_select").onclick = () => {
     openModal("to");
 };
 document.getElementById("modal_close").onclick = closeModal;
+// Вызываем обновление цены, когдаа пользователь убирает мышку с поля ввода.
 document.getElementById("from_amount").onblur = getPrice;
 document.getElementById("swap_button").onclick = trySwap;
