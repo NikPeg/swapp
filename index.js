@@ -57,27 +57,40 @@ function renderInterface(){
     }
 }
 
+// Подключение к MetaMask.
+// Мы хотим, чтобы пользователи могли выполнять обмен только в том случае, если у них установлен кошелек MetaMask.
 async function connect() {
+    // Metal Mask предоставляет API для веб-сайтв, посещаемых его пользователями в window.ethereum. 
+    // Этот API позволяет веб-сайтам запрашивать учетные записи пользователей Ethereum, считывать данные из блокчейнов, 
+    // к которым подключен пользователь, и предлагать пользователю подписывать сообщения и транзакции. 
+    // Наличие объекта provider указывает на пользователя Ethereum. Источник: https://ethereum.stackexchange.com/a/68294/85979
+
+    // Проверяем, установлен ли MetaMask, если это так, пробуем подключиться к учетной записи.
     if (typeof window.ethereum !== "undefined") {
         try {
             console.log("connecting");
+            // Запрашивает, чтобы пользователь предоставил адрес Ethereum для идентификации. Запрос вызывает появление всплывающего окна MetaMask.
             await ethereum.request({ method: "eth_requestAccounts" });
         } catch (error) {
             console.log(error);
         }
+        // При успешном подключении, кнопка меняется на "Подключено".
         document.getElementById("login_button").innerHTML = "Подключено";
         // const accounts = await ethereum.request({ method: "eth_accounts" });
         document.getElementById("swap_button").disabled = false;
     } else {
-        document.getElementById("login_button").innerHTML = "Please install MetaMask";
+        // Если MetaMask не установлен, просим пользователя его установить.
+        document.getElementById("login_button").innerHTML = "Пожалуйста, установите MetaMask";
     }
 }
 
+//  Функция, которая открывает модальное окно при нажатии на надпись "Выберете токен".
 function openModal(side){
     currentSelectSide = side;
     document.getElementById("token_modal").style.display = "block";
 }
 
+//  Функция, которая закрывает модальное окно при нажатии на крестик.
 function closeModal(){
     document.getElementById("token_modal").style.display = "none";
 }
