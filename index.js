@@ -164,7 +164,7 @@ async  function  trySwap(){
     )
     .send({ from: takerAddress })
     .then(tx => {
-        console.log("tx: ", tx)
+        console.log("tx: ", tx);
     });
 
     // Perform the swap
