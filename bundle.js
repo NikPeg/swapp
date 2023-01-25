@@ -147,11 +147,12 @@ async function getQuote(account){
     console.log("Getting Quote");
   
     if (!currentTrade.from || !currentTrade.to || !document.getElementById("from_amount").value) return;
+    if (currentTrade.from.symbol == "ETHER") currentTrade.from.symbol = "ETH";
     let amount = Number(document.getElementById("from_amount").value * 10 ** currentTrade.from.decimals);
   
     const params = {
-        sellToken: currentTrade.from,
-        buyToken: currentTrade.to,
+        sellToken: currentTrade.from.symbol,
+        buyToken: currentTrade.to.symbol,
         sellAmount: amount,
         takerAddress: account,
         affiliateAddress: account,

@@ -1,0 +1,188 @@
+{
+  "id": "40d88d0b-8215-4417-b41e-ba206580cca1",
+  "version": "2.0",
+  "name": "SWAPP",
+  "url": "http://127.0.0.1:5500",
+  "tests": [{
+    "id": "4e743fc5-fffa-408c-b20f-38043162c6ea",
+    "name": "test_simple_swap",
+    "commands": [{
+      "id": "34af5d6f-4cb0-49c4-aaf5-a5702afca769",
+      "comment": "",
+      "command": "open",
+      "target": "/index.html",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "fcb111f6-1c79-4f43-b0d6-dd38fe1ff06e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1536x824",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b3a928ba-3d7d-4976-b805-ecdc103c9e1a",
+      "comment": "",
+      "command": "click",
+      "target": "id=login_button",
+      "targets": [
+        ["id=login_button", "id"],
+        ["css=#login_button", "css:finder"],
+        ["xpath=//button[@id='login_button']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Войти в MetaMask')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "03408c83-625f-410c-9fc2-fc4bc860ec03",
+      "comment": "",
+      "command": "click",
+      "target": "id=from_token_text",
+      "targets": [
+        ["id=from_token_text", "id"],
+        ["css=#from_token_text", "css:finder"],
+        ["xpath=//span[@id='from_token_text']", "xpath:attributes"],
+        ["xpath=//div[@id='from_token_select']/span", "xpath:idRelative"],
+        ["xpath=//span", "xpath:position"],
+        ["xpath=//span[contains(.,'Выберете токен')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0944caf7-7085-4077-bb49-7248c24fa467",
+      "comment": "",
+      "command": "click",
+      "target": "css=.token_row:nth-child(1868)",
+      "targets": [
+        ["css=.token_row:nth-child(1868)", "css:finder"],
+        ["xpath=//div[@id='token_list']/div[1868]", "xpath:idRelative"],
+        ["xpath=//div[1868]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "cd7de448-e811-43d2-b96e-e685f191e91b",
+      "comment": "",
+      "command": "click",
+      "target": "id=from_amount",
+      "targets": [
+        ["id=from_amount", "id"],
+        ["css=#from_amount", "css:finder"],
+        ["xpath=//input[@id='from_amount']", "xpath:attributes"],
+        ["xpath=//div[@id='form']/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "40d64fa3-a272-4332-9112-ac00ec94fb7d",
+      "comment": "",
+      "command": "type",
+      "target": "id=from_amount",
+      "targets": [
+        ["id=from_amount", "id"],
+        ["css=#from_amount", "css:finder"],
+        ["xpath=//input[@id='from_amount']", "xpath:attributes"],
+        ["xpath=//div[@id='form']/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "0.0001"
+    }, {
+      "id": "e43e2f42-1903-4f09-8b58-e4c26f1453b0",
+      "comment": "",
+      "command": "click",
+      "target": "id=to_token_select",
+      "targets": [
+        ["id=to_token_select", "id"],
+        ["css=#to_token_select", "css:finder"],
+        ["xpath=//div[@id='to_token_select']", "xpath:attributes"],
+        ["xpath=//div[@id='form']/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "42ed715f-dd6b-4820-9007-36577f9f9d02",
+      "comment": "",
+      "command": "click",
+      "target": "css=.token_row:nth-child(4156)",
+      "targets": [
+        ["css=.token_row:nth-child(4156)", "css:finder"],
+        ["xpath=//div[@id='token_list']/div[4156]", "xpath:idRelative"],
+        ["xpath=//div[4156]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b98f0f8e-a424-4c7c-a429-b08ec1f58422",
+      "comment": "",
+      "command": "click",
+      "target": "id=to_amount",
+      "targets": [
+        ["id=to_amount", "id"],
+        ["css=#to_amount", "css:finder"],
+        ["xpath=//input[@id='to_amount']", "xpath:attributes"],
+        ["xpath=//div[@id='form']/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "76850b66-6492-4bf4-8b85-3dd0e485de5f",
+      "comment": "",
+      "command": "click",
+      "target": "id=form",
+      "targets": [
+        ["id=form", "id"],
+        ["css=#form", "css:finder"],
+        ["xpath=//div[@id='form']", "xpath:attributes"],
+        ["xpath=//div[@id='window']/div", "xpath:idRelative"],
+        ["xpath=//div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a5aed660-adb8-4e25-8fb3-fa449e59415a",
+      "comment": "",
+      "command": "click",
+      "target": "id=from_amount",
+      "targets": [
+        ["id=from_amount", "id"],
+        ["css=#from_amount", "css:finder"],
+        ["xpath=//input[@id='from_amount']", "xpath:attributes"],
+        ["xpath=//div[@id='form']/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "aa03a71e-5258-4420-b0e7-aa5f7c555324",
+      "comment": "",
+      "command": "click",
+      "target": "css=h4",
+      "targets": [
+        ["css=h4", "css:finder"],
+        ["xpath=//div[@id='window']/h4", "xpath:idRelative"],
+        ["xpath=//h4", "xpath:position"],
+        ["xpath=//h4[contains(.,'Обменять')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8e53de21-1100-4071-8d05-7eb8b88bac63",
+      "comment": "",
+      "command": "click",
+      "target": "id=swap_button",
+      "targets": [
+        ["id=swap_button", "id"],
+        ["css=#swap_button", "css:finder"],
+        ["xpath=//button[@id='swap_button']", "xpath:attributes"],
+        ["xpath=//div[@id='form']/button", "xpath:idRelative"],
+        ["xpath=//div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Обменять')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "41b57db1-0fe8-4d97-aac4-99e9dc523da8",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["4e743fc5-fffa-408c-b20f-38043162c6ea"]
+  }],
+  "urls": ["http://127.0.0.1:5500/"],
+  "plugins": []
+}
